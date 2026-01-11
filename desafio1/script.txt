@@ -1,0 +1,40 @@
+// 1. Criar Usuários
+UNWIND [
+  {nome: 'Alice'}, {nome: 'Bruno'}, {nome: 'Carla'}, {nome: 'Diego'}, {nome: 'Elena'},
+  {nome: 'Fabio'}, {nome: 'Gisele'}, {nome: 'Hugo'}, {nome: 'Iara'}, {nome: 'João'}
+] AS uRow
+CREATE (:User {name: uRow.nome})
+
+// 2. Criar Gêneros
+WITH count(*) AS dummy
+MERGE (g_sci:Genre {name: 'Sci-Fi'})
+MERGE (g_dra:Genre {name: 'Drama'})
+
+// 3. Criar Filmes e já conectar aos Gêneros
+WITH g_sci, g_dra
+CREATE (m1:Movie {title: 'The Matrix', year: 1999})-[:IN_GENRE]->(g_sci)
+CREATE (m2:Movie {title: 'Interstellar', year: 2014})-[:IN_GENRE]->(g_sci)
+CREATE (m3:Movie {title: 'Avatar', year: 2009})-[:IN_GENRE]->(g_sci)
+CREATE (m4:Movie {title: 'The Godfather', year: 1972})-[:IN_GENRE]->(g_dra)
+CREATE (m5:Movie {title: 'Joker', year: 2019})-[:IN_GENRE]->(g_dra)
+CREATE (m6:Movie {title: 'Parasite', year: 2019})-[:IN_GENRE]->(g_dra)
+CREATE (m7:Movie {title: 'Gladiator', year: 2000})
+CREATE (m8:Movie {title: 'Pulp Fiction', year: 1994})
+CREATE (m9:Movie {title: 'The Dark Knight', year: 2008})
+CREATE (m10:Movie {title: 'Seven', year: 1995})
+
+// 4. Criar Atores, Diretores e Séries
+CREATE (a:Actor {name: 'Leonardo DiCaprio'})
+CREATE (d:Director {name: 'Christopher Nolan'})
+CREATE (s:Series {title: 'Stranger Things', seasons: 4})
+
+// 5. Conectar Ator e Diretor ao filme Interstellar
+WITH a, d, m2
+MERGE (a)-[:ACTED_IN]->(m2)
+MERGE (d)-[:DIRECTED]->(m2)
+
+// 6. Criar Relacionamentos WATCHED aleatórios
+WITH count(*) AS dummy
+MATCH (u:User), (m:Movie)
+WHERE rand() < 0.3
+MERGE (u)-[:WATCHED {rating: toInteger(rand() * 3) + 3}]->(m);
