@@ -1,0 +1,17 @@
+CREATE CONSTRAINT user_unique_id IF NOT EXISTS 
+FOR (u:Usuario) REQUIRE u.username IS UNIQUE;
+
+CREATE CONSTRAINT music_unique_id IF NOT EXISTS 
+FOR (m:Musica) REQUIRE m.id_musica IS UNIQUE;
+
+CREATE CONSTRAINT artist_unique_id IF NOT EXISTS 
+FOR (a:Artista) REQUIRE a.nome IS UNIQUE;
+
+CREATE INDEX music_title_index IF NOT EXISTS 
+FOR (m:Musica) ON (m.titulo);
+
+CREATE INDEX genre_name_index IF NOT EXISTS 
+FOR (g:Genero) ON (g.nome);
+
+CREATE TEXT INDEX artist_name_text_index IF NOT EXISTS 
+FOR (a:Artista) ON (a.nome);

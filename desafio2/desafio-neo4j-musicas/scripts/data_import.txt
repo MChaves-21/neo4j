@@ -1,0 +1,40 @@
+MERGE (u1:Usuario {username: 'alice_jazz', idade: 28})
+MERGE (u2:Usuario {username: 'bob_rock', idade: 35})
+MERGE (u3:Usuario {username: 'carol_pop', idade: 22})
+MERGE (u4:Usuario {username: 'dave_indie', idade: 30})
+
+MERGE (g1:Genero {nome: 'Jazz'})
+MERGE (g2:Genero {nome: 'Rock'})
+MERGE (g3:Genero {nome: 'Pop'})
+
+MERGE (a1:Artista {nome: 'Miles Davis'})
+MERGE (a2:Artista {nome: 'Queen'})
+MERGE (a3:Artista {nome: 'Dua Lipa'})
+
+MERGE (m1:Musica {id_musica: 'M1', titulo: 'So What', duracao: 541})
+MERGE (m2:Musica {id_musica: 'M2', titulo: 'Bohemian Rhapsody', duracao: 354})
+MERGE (m3:Musica {id_musica: 'M3', titulo: 'Levitating', duracao: 203})
+MERGE (m4:Musica {id_musica: 'M4', titulo: 'Don’t Stop Me Now', duracao: 209})
+
+MERGE (m1)-[:DO_GENERO]->(g1)
+MERGE (m2)-[:DO_GENERO]->(g2)
+MERGE (m3)-[:DO_GENERO]->(g3)
+MERGE (m4)-[:DO_GENERO]->(g2)
+
+MERGE (a1)-[:LANÇOU]->(m1)
+MERGE (a2)-[:LANÇOU]->(m2)
+MERGE (a3)-[:LANÇOU]->(m3)
+MERGE (a2)-[:LANÇOU]->(m4)
+
+MERGE (u1)-[:ESCUTOU {vezes: 15}]->(m1)
+MERGE (u1)-[:CURTIU]->(m1)
+MERGE (u2)-[:ESCUTOU {vezes: 10}]->(m2)
+MERGE (u2)-[:CURTIU]->(m2)
+MERGE (u3)-[:ESCUTOU {vezes: 20}]->(m3)
+MERGE (u3)-[:CURTIU]->(m3)
+MERGE (u4)-[:ESCUTOU {vezes: 5}]->(m2)
+MERGE (u4)-[:CURTIU]->(m4)
+
+MERGE (u1)-[:SEGUE]->(a1)
+MERGE (u2)-[:SEGUE]->(a2)
+MERGE (u4)-[:SEGUE]->(a2)

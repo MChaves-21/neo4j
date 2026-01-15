@@ -1,0 +1,29 @@
+// 1. Recomendação baseada em afinidade (Quem ouviu X também ouviu Y)
+MATCH (u:Usuario {username: 'bob_rock'})-[:CURTIU]->(m:Musica)<-[:CURTIU]-(outro:Usuario)
+MATCH (outro)-[:CURTIU]->(rec:Musica)
+WHERE NOT (u)-[:CURTIU]->(rec)
+RETURN rec.titulo AS Recomendacao, count(*) AS Forca
+ORDER BY Forca DESC;
+
+// 2. Recomendação por gênero mais ouvido (Exploração de Gênero)
+MATCH (u:Usuario {username: 'alice_jazz'})-[:ESCUTOU]->(m:Musica)-[:DO_GENERO]->(g:Genero)
+WITH u, g, count(m) AS peso
+MATCH (rec:Musica)-[:DO_GENERO]->(g)
+WHERE NOT (u)-[:ESCUTOU]->(rec)
+RETURN rec.titulo AS Musica_Sugerida, g.nome AS Genero, peso
+ORDER BY peso DESC
+LIMIT 5;
+
+// 3. Recomendação de novos lançamentos de artistas seguidos
+MATCH (u:Usuario {username: 'dave_indie'})-[:SEGUE]->(a:Artista)-[:LANÇOU]->(m:Musica)
+WHERE NOT (u)-[:ESCUTOU]->(m)
+RETURN a.nome AS Artista, m.titulo AS Lancamento;
+
+// 4. Descoberta Semanal (Músicas de gêneros similares aos que o usuário curte)
+MATCH (u:Usuario {username: 'carol_pop'})-[:CURTIU]->(:Musica)-[:DO_GENERO]->(g:Genero)
+WITH DISTINCT g
+MATCH (g)<-[:DO_GENERO]-(rec:Musica)
+WITH rec, count(*) AS ocorrencias
+RETURN rec.titulo AS Titulo, ocorrencias
+ORDER BY ocorrencias DESC
+LIMIT 10;
