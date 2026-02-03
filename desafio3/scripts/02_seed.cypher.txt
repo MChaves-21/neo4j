@@ -1,0 +1,29 @@
+MERGE (u1:Usuario {username: 'bruno_dev', nome: 'Bruno Silva', cidade: 'São Paulo'})
+MERGE (u2:Usuario {username: 'ana_tech', nome: 'Ana Costa', cidade: 'Rio de Janeiro'})
+MERGE (u3:Usuario {username: 'carla_mkt', nome: 'Carla Dias', cidade: 'São Paulo'})
+MERGE (u4:Usuario {username: 'felipe_data', nome: 'Felipe Souza', cidade: 'Belo Horizonte'})
+
+MERGE (t1:Tag {nome: 'Neo4j'})
+MERGE (t2:Tag {nome: 'DataScience'})
+MERGE (t3:Tag {nome: 'Grafos'})
+
+MERGE (p1:Post {id_post: 'P1', texto: 'Aprendendo Cypher hoje!', data_criacao: datetime()})
+MERGE (p2:Post {id_post: 'P2', texto: 'Grafos são incríveis para redes sociais', data_criacao: datetime()})
+
+MERGE (u1)-[:SEGUE]->(u2)
+MERGE (u1)-[:SEGUE]->(u3)
+MERGE (u2)-[:SEGUE]->(u3)
+MERGE (u3)-[:SEGUE]->(u4)
+MERGE (u4)-[:SEGUE]->(u1)
+
+MERGE (u1)-[:POSTOU]->(p1)
+MERGE (u2)-[:POSTOU]->(p2)
+
+MERGE (p1)-[:TEM_TAG]->(t1)
+MERGE (p1)-[:TEM_TAG]->(t3)
+MERGE (p2)-[:TEM_TAG]->(t2)
+MERGE (p2)-[:TEM_TAG]->(t3)
+
+MERGE (u1)-[:INTERESSADO_EM]->(t1)
+MERGE (u1)-[:INTERESSADO_EM]->(t3)
+MERGE (u2)-[:INTERESSADO_EM]->(t2)

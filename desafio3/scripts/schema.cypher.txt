@@ -1,0 +1,14 @@
+CREATE CONSTRAINT user_unique_username IF NOT EXISTS 
+FOR (u:Usuario) REQUIRE u.username IS UNIQUE;
+
+CREATE CONSTRAINT post_unique_id IF NOT EXISTS 
+FOR (p:Post) REQUIRE p.id_post IS UNIQUE;
+
+CREATE INDEX user_name_index IF NOT EXISTS 
+FOR (u:Usuario) ON (u.nome);
+
+CREATE INDEX post_date_index IF NOT EXISTS 
+FOR (p:Post) ON (p.data_criacao);
+
+CREATE INDEX tag_name_index IF NOT EXISTS 
+FOR (t:Tag) ON (t.nome);

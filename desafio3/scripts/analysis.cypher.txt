@@ -1,0 +1,24 @@
+// A. Ranking de Influenciadores (Quem tem mais seguidores)
+MATCH (u:Usuario)<-[:SEGUE]-(seguidor)
+RETURN u.username AS Usuario, count(seguidor) AS Seguidores
+ORDER BY Seguidores DESC;
+
+// B. Sugestão de Amizade (Amigos de amigos que eu ainda não sigo)
+MATCH (u:Usuario {username: 'bruno_dev'})-[:SEGUE]->(amigo)-[:SEGUE]->(sugestao)
+WHERE NOT (u)-[:SEGUE]->(sugestao) AND u <> sugestao
+RETURN sugestao.username AS Sugestao, count(*) AS AmigosEmComum
+ORDER BY AmigosEmComum DESC;
+
+// C. Comunidades por Interesse (Usuários interessados na mesma Tag)
+MATCH (t:Tag {nome: 'Grafos'})<-[:INTERESSADO_EM]-(u:Usuario)
+RETURN t.nome AS Interesse, collect(u.username) AS Usuarios;
+
+// D. Caminho de Conexão (Descobrir como Bruno chega até Felipe)
+MATCH (inicio:Usuario {username: 'bruno_dev'}), (fim:Usuario {username: 'felipe_data'})
+MATCH caminho = shortestPath((inicio)-[:SEGUE*..5]->(fim))
+RETURN caminho;
+
+// E. Tags em alta na rede (Quais assuntos são mais marcados em posts)
+MATCH (t:Tag)<-[:TEM_TAG]-(p:Post)
+RETURN t.nome AS Tag, count(p) AS NumeroDePosts
+ORDER BY NumeroDePosts DESC;
