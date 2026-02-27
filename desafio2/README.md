@@ -1,0 +1,1 @@
+Este projeto implementa um sistema de recomendação de músicas utilizando Banco de Dados de Grafos (Neo4j). O modelo conecta usuários, artistas, músicas e gêneros para fornecer sugestões personalizadas baseadas em comportamento de escuta, afinidade entre usuários e seguimento de artistas.
